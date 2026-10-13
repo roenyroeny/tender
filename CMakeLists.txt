@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(renderterm VERSION 1.0.0 LANGUAGES C CXX)
+project(tender VERSION 1.0.0 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -82,7 +82,7 @@ include_directories(
     src
 )
 
-add_executable(renderterm
+add_executable(tender
     src/main.cpp
     src/display.cpp
     src/xvfb_server.cpp
@@ -96,7 +96,7 @@ add_executable(renderterm
     ${WAYLAND_SOURCES}
 )
 
-target_link_libraries(renderterm
+target_link_libraries(tender
     PRIVATE
     ${X11_LIBRARIES}
     ${X11_Xext_LIB}
@@ -110,11 +110,11 @@ target_link_libraries(renderterm
     dl
 )
 
-target_compile_definitions(renderterm PRIVATE
+target_compile_definitions(tender PRIVATE
     HAVE_WAYLAND=$<BOOL:${HAVE_WAYLAND}>
     HAVE_DMABUF=$<BOOL:${HAVE_DMABUF}>
 )
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-    target_compile_definitions(renderterm PRIVATE DEBUG)
+    target_compile_definitions(tender PRIVATE DEBUG)
 endif()

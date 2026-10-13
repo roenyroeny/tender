@@ -14,7 +14,7 @@ int ignore_x_error(Display* dpy, XErrorEvent* ev) {
     if (count++ < 5) {
         char buf[256];
         XGetErrorText(dpy, ev->error_code, buf, sizeof(buf));
-        std::fprintf(stderr, "renderterm: X error: %s (request %d.%d)\n",
+        std::fprintf(stderr, "tender: X error: %s (request %d.%d)\n",
                      buf, ev->request_code, ev->minor_code);
     }
     return 0;
@@ -274,7 +274,7 @@ bool Capturer::capture(unsigned long win_id, Frame& frame, int* out_x, int* out_
         if (!warned) {
             warned = true;
             std::fprintf(stderr,
-                         "renderterm: root capture failed; win=0x%lx x=%d y=%d "
+                         "tender: root capture failed; win=0x%lx x=%d y=%d "
                          "w=%d h=%d border=%d depth=%d map=%d; root=%dx%d "
                          "crop=(%d,%d %dx%d)\n",
                          static_cast<unsigned long>(win), attrs.x, attrs.y,

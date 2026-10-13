@@ -1,4 +1,4 @@
-# renderterm
+# tender
 
 Run a GUI program on private virtual displays (X11 via Xvfb and a built-in
 headless Wayland compositor, both at once) and render its graphical output into
@@ -10,15 +10,15 @@ automatically.
 ## Usage
 
 ```bash
-renderterm [OPTIONS] -- <program> [args...]
+tender [OPTIONS] -- <program> [args...]
 ```
 
 Examples:
 ```bash
-renderterm xeyes
-renderterm --fps 20 xclock -analog
-renderterm --size 640x480 -- xlogo
-renderterm --connect :0 xeyes        # use an existing X server instead of Xvfb
+tender xeyes
+tender --fps 20 xclock -analog
+tender --size 640x480 -- xlogo
+tender --connect :0 xeyes        # use an existing X server instead of Xvfb
 ```
 
 Options:
@@ -35,7 +35,7 @@ Options:
 
 ## Placement
 
-With `-f`/`--fullscreen` renderterm switches to the alternate screen, clears it,
+With `-f`/`--fullscreen` tender switches to the alternate screen, clears it,
 and uses the whole terminal as a workspace (leaving restores your previous
 content); otherwise it draws inline at the current cursor position. Each window
 is surrounded by a rounded box (`╭─╮` / `│` / `╰─╯`, or `+`/`-`/`|` when the
@@ -79,7 +79,7 @@ for Wayland):
   terminal cells are mapped to screen pixels using the image geometry.
 
 Mouse reporting captures the mouse, so hold **Shift** for normal terminal
-text selection. If the X server lacks XTEST, renderterm falls back to
+text selection. If the X server lacks XTEST, tender falls back to
 display-only and says so.
 
 ## Signals
@@ -92,7 +92,7 @@ The terminal is also restored via an `atexit` hook as a safety net.
 
 ## Wayland
 
-Alongside Xvfb, renderterm runs a small built-in headless compositor and
+Alongside Xvfb, tender runs a small built-in headless compositor and
 captures its buffers. No external compositor is needed, and both backends are
 active at the same time: the program picks whichever its toolkit prefers.
 It implements `wl_compositor`, `wl_shm`, `xdg-shell`, `wl_subcompositor`
@@ -104,8 +104,8 @@ currently displayed.
 This is enough to run real toolkits and browsers:
 
 ```bash
-renderterm -- zenity --info --text=hello
-renderterm --size 1000x750 -- firefox --no-remote --new-instance about:blank
+tender -- zenity --info --text=hello
+tender --size 1000x750 -- firefox --no-remote --new-instance about:blank
 ```
 
 Notes:
@@ -114,7 +114,7 @@ Notes:
 - Some clients render their content into a **subsurface** (e.g. Firefox); these
   are composited over the toplevel.
 - If the built-in compositor is unavailable (missing Wayland dev libraries), or
-  Xvfb is missing, renderterm runs with whichever backend is left.
+  Xvfb is missing, tender runs with whichever backend is left.
 
 ## Requirements
 
@@ -123,10 +123,10 @@ Notes:
 - Dev libraries: `libX11`, `libXext`, `libXfixes`, `zlib`.
 - Optional (Wayland backend): `wayland-server`, `wayland-protocols`,
   `wayland-scanner`, `xkbcommon`, and `egl`/`glesv2` (for dmabuf clients).
-  Without these, renderterm builds and runs X11-only.
+  Without these, tender builds and runs X11-only.
 - A terminal for display. The protocol is auto-detected: Kitty-compatible
   (Kitty, Ghostty, WezTerm, Konsole, ...), else sixel (xterm with sixel, foot,
-  mlterm, ...). If the terminal supports neither, renderterm exits with an
+  mlterm, ...). If the terminal supports neither, tender exits with an
   error unless `--ansi` is given, which selects a low-resolution 24-bit-colour
   half-block fallback that works on any truecolor terminal (e.g. GNOME Terminal).
 
@@ -135,7 +135,7 @@ Notes:
 ```bash
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build -j
-./build/renderterm xeyes
+./build/tender xeyes
 ```
 
 ## Architecture

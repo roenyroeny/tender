@@ -779,7 +779,7 @@ static void send_keymap(Impl* impl, wl_resource* kb) {
     char* str = xkb_keymap_get_as_string(impl->xkb_map, XKB_KEYMAP_FORMAT_TEXT_V1);
     if (!str) return;
     size_t len = std::strlen(str) + 1;
-    int fd = memfd_create("renderterm-keymap", MFD_CLOEXEC);
+    int fd = memfd_create("tender-keymap", MFD_CLOEXEC);
     if (fd >= 0) {
         if (ftruncate(fd, len) == 0) {
             void* m = mmap(nullptr, len, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
@@ -901,7 +901,7 @@ static void bind_output(wl_client* client, void* data, uint32_t version, uint32_
                                           std::min<uint32_t>(version, 3), id);
     wl_resource_set_implementation(res, &output_impl, nullptr, nullptr);
     wl_output_send_geometry(res, 0, 0, 300, 200, WL_OUTPUT_SUBPIXEL_UNKNOWN,
-                            "renderterm", "renderterm", WL_OUTPUT_TRANSFORM_NORMAL);
+                            "tender", "tender", WL_OUTPUT_TRANSFORM_NORMAL);
     wl_output_send_mode(res, WL_OUTPUT_MODE_CURRENT, impl->width, impl->height, 60000);
     wl_output_send_scale(res, 1);
     wl_output_send_done(res);
@@ -955,7 +955,7 @@ bool WaylandServer::start() {
     impl->height = m_height;
     m_impl = impl;
 
-    char tmpl[] = "/tmp/renderterm-wl-XXXXXX";
+    char tmpl[] = "/tmp/tender-wl-XXXXXX";
     char* dir = mkdtemp(tmpl);
     if (!dir) { delete impl; m_impl = nullptr; return false; }
     m_runtime_dir = dir;

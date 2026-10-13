@@ -96,9 +96,9 @@ struct Options {
 
 void print_usage() {
     std::cout <<
-        "renderterm - render a GUI program's output to the terminal (kitty protocol)\n\n"
+        "tender - render a GUI program's output to the terminal (kitty protocol)\n\n"
         "Usage:\n"
-        "  renderterm [OPTIONS] -- <program> [args...]\n\n"
+        "  tender [OPTIONS] -- <program> [args...]\n\n"
         "Options:\n"
         "  --fps N          Target frames per second (default 30)\n"
         "  --size WxH       Max virtual screen size (default 1920x1080); the\n"
@@ -154,11 +154,11 @@ bool parse_args(int argc, char** argv, Options& opt) {
             opt.scale = std::atof(argv[++i]);
         } else if (a == "--size" && i + 1 < argc) {
             if (!parse_size(argv[++i], opt.screen_w, opt.screen_h)) {
-                std::cerr << "renderterm: invalid size\n";
+                std::cerr << "tender: invalid size\n";
                 return false;
             }
         } else if (!a.empty() && a[0] == '-' && a != "-") {
-            std::cerr << "renderterm: unknown option: " << a << "\n";
+            std::cerr << "tender: unknown option: " << a << "\n";
             return false;
         } else {
             opt.program.push_back(a);
@@ -364,7 +364,7 @@ int main(int argc, char** argv) {
     if (!opt.connect_display.empty()) {
         display = DisplayServerFactory::create_existing(opt.connect_display);
         if (!display->start()) {
-            std::cerr << "renderterm: cannot connect to display "
+            std::cerr << "tender: cannot connect to display "
                       << opt.connect_display << "\n";
             delete display;
             return 1;
@@ -377,7 +377,7 @@ int main(int argc, char** argv) {
             display_name = display->display_name();
             x_ready = true;
         } else {
-            std::cerr << "renderterm: no virtual X server (Xvfb); continuing with "
+            std::cerr << "tender: no virtual X server (Xvfb); continuing with "
                          "Wayland only.\nInstall it (e.g. 'sudo apt install xvfb').\n";
             delete display;
             display = nullptr;
@@ -389,7 +389,7 @@ int main(int argc, char** argv) {
 #if HAVE_WAYLAND
     wl_ready = wl.start();
     if (!wl_ready) {
-        std::cerr << "renderterm: built-in Wayland compositor failed to start; "
+        std::cerr << "tender: built-in Wayland compositor failed to start; "
                      "continuing with X11 only.\n";
     }
 #endif
@@ -399,7 +399,7 @@ int main(int argc, char** argv) {
     }
 
     if (!x_ready && !wl_ready) {
-        std::cerr << "renderterm: no usable display backend (X11 or Wayland)\n";
+        std::cerr << "tender: no usable display backend (X11 or Wayland)\n";
         if (display) { display->stop(); delete display; }
         return 1;
     }
@@ -407,7 +407,7 @@ int main(int argc, char** argv) {
     // 2. Launch the target program.
     App app(display_name);
     if (!app.launch(opt.program)) {
-        std::cerr << "renderterm: failed to launch: " << opt.program.front() << "\n";
+        std::cerr << "tender: failed to launch: " << opt.program.front() << "\n";
         if (display) { display->stop(); delete display; }
         wl.stop();
         return 1;
@@ -421,7 +421,7 @@ int main(int argc, char** argv) {
     input.set_wayland(&wl);
     bool input_ok = input.init();
     if (!input_ok) {
-        std::cerr << "renderterm: input forwarding unavailable; display only\n";
+        std::cerr << "tender: input forwarding unavailable; display only\n";
     }
 
     Terminal term;
@@ -441,7 +441,7 @@ int main(int argc, char** argv) {
         gfx = Terminal::Graphics::Ansi;
     }
     if (gfx == Terminal::Graphics::Unsupported) {
-        std::cerr << "renderterm: this terminal supports neither the Kitty "
+        std::cerr << "tender: this terminal supports neither the Kitty "
                      "graphics protocol nor sixel.\n"
                      "Use --ansi for a low-resolution (half-block) fallback, "
                      "or run in a graphics-capable terminal.\n";
