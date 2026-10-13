@@ -1,0 +1,5 @@
+build/
+tests/encode_out.bin
+*.o
+.tmp/
+wl_events.log
