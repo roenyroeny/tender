@@ -16,9 +16,6 @@ tender [OPTIONS] -- <program> [args...]
 Examples:
 ```bash
 tender xeyes
-tender --fps 20 xclock -analog
-tender --size 640x480 -- xlogo
-tender --connect :0 xeyes        # use an existing X server instead of Xvfb
 ```
 
 Options:
@@ -133,21 +130,7 @@ Notes:
 ## Building
 
 ```bash
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build -j
+cmake -B build
+cmake --build build
 ./build/tender xeyes
 ```
-
-## Architecture
-
-- `xvfb_server` / `display` — spawn and manage the virtual X display.
-- `wayland_server` — built-in headless compositor (wl_shm + dmabuf, subsurfaces, seat input).
-- `egl_import` — imports linux-dmabuf buffers via EGL and reads them back.
-- `app` — launch the target program and track its lifetime.
-- `capture` — enumerate the target windows and grab pixels from the root window,
-  cropped to each (windows are re-discovered continuously).
-- `kitty` — zlib-compress, base64-encode and chunk RGB frames as APC sequences.
-- `sixel` — encode RGB frames as sixel (fallback for non-Kitty terminals).
-- `ansi` — 24-bit-colour half-block renderer (fallback when neither is supported).
-- `term` — raw mode, cursor handling, mouse modes and size queries.
-- `input` — parse terminal keyboard/mouse and inject via XTEST or the seat.
